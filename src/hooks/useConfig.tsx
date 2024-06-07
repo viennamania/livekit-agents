@@ -42,16 +42,16 @@ const defaultConfig: AppConfig = {
   description: "A playground for testing LiveKit Agents",
   video_fit: "cover",
   settings: {
-    editable: true,
+    editable: false,
     theme_color: "cyan",
-    chat: true,
+    chat: false,
     inputs: {
-      camera: true,
+      camera: false,
       mic: true,
     },
     outputs: {
       audio: true,
-      video: true,
+      video: false,
     },
     ws_url: "",
     token: "",
@@ -59,8 +59,12 @@ const defaultConfig: AppConfig = {
   show_qr: false,
 };
 
+
 const useAppConfig = (): AppConfig => {
+
   return useMemo(() => {
+
+    /*
     if (process.env.NEXT_PUBLIC_APP_CONFIG) {
       try {
         const parsedConfig = jsYaml.load(
@@ -77,6 +81,8 @@ const useAppConfig = (): AppConfig => {
         console.error("Error parsing app config:", e);
       }
     }
+    */
+
     return defaultConfig;
   }, []);
 };
@@ -89,7 +95,9 @@ type ConfigData = {
 const ConfigContext = createContext<ConfigData | undefined>(undefined);
 
 export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
+  
   const appConfig = useAppConfig();
+
   const router = useRouter();
   const [localColorOverride, setLocalColorOverride] = useState<string | null>(
     null
@@ -102,7 +110,10 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     if (!window.location.hash) {
       return null;
     }
+    
     const appConfigFromSettings = appConfig;
+
+
     if (appConfigFromSettings.settings.editable === false) {
       return null;
     }
