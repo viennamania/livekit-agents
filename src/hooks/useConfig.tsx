@@ -38,9 +38,14 @@ export type UserSettings = {
 
 // Fallback if NEXT_PUBLIC_APP_CONFIG is not set
 const defaultConfig: AppConfig = {
-  title: "LiveKit Agents Playground",
-  description: "A playground for testing LiveKit Agents",
+  
+  //title: "LiveKit Agents Playground",
+  title: "Kyung Hee",
+
+  description: "Kyung Hee Forever",
+
   video_fit: "cover",
+
   settings: {
     editable: false,
     theme_color: "cyan",
@@ -117,7 +122,9 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
     if (appConfigFromSettings.settings.editable === false) {
       return null;
     }
+
     const params = new URLSearchParams(window.location.hash.replace("#", ""));
+
     return {
       editable: true,
       chat: params.get("chat") === "1",
@@ -134,6 +141,7 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
       ws_url: "",
       token: "",
     } as UserSettings;
+    
   }, [appConfig]);
 
   const getSettingsFromCookies = useCallback(() => {

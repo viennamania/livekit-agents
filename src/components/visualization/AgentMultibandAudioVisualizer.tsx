@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 type VisualizerState = "listening" | "idle" | "speaking" | "thinking";
+
 type AgentMultibandAudioVisualizerProps = {
   state: VisualizerState;
   barWidth: number;

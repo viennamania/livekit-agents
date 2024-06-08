@@ -171,10 +171,13 @@ export default function Playground({
     );
   }, [agentVideoTrack, config, roomState]);
 
+
+
   const audioTileContent = useMemo(() => {
+
     const disconnectedContent = (
-      <div className="flex flex-col items-center justify-center gap-2 text-gray-700 text-center w-full">
-        No audio track. Connect to get started.
+      <div className="flex flex-col items-center justify-center gap-2 text-gray-500 text-3xl text-center w-full">
+        Connect to start conversation with Seung Hyon
       </div>
     );
 
@@ -187,7 +190,18 @@ export default function Playground({
 
     // TODO: keep it in the speaking state until we come up with a better protocol for agent states
     const visualizerContent = (
-      <div className="flex items-center justify-center w-full">
+      <div className="flex flex-col gap-10 items-center justify-center w-full">
+
+        {localMicTrack && (
+          <ConfigurationPanelItem
+            title="Microphone"
+            deviceSelectorKind="audioinput"
+          >
+            <AudioInputTile frequencies={localMultibandVolume} />
+          </ConfigurationPanelItem>
+        )}
+
+
         <AgentMultibandAudioVisualizer
           state="speaking"
           barWidth={30}
@@ -199,6 +213,7 @@ export default function Playground({
           borderRadius={12}
           gap={16}
         />
+
       </div>
     );
 
@@ -211,11 +226,15 @@ export default function Playground({
     }
 
     return visualizerContent;
+
   }, [
     agentAudioTrack,
     config.settings.theme_color,
     subscribedVolumes,
     roomState,
+
+    localMicTrack,
+    localMultibandVolume,
   ]);
 
   const chatTileContent = useMemo(() => {
@@ -233,12 +252,16 @@ export default function Playground({
   const settingsTileContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4 h-full w-full items-start overflow-y-auto">
+        
+        
         {config.description && (
           <ConfigurationPanelItem title="Description">
             {config.description}
           </ConfigurationPanelItem>
         )}
+        
 
+        
         <ConfigurationPanelItem title="Settings">
           {localParticipant && (
             <div className="flex flex-col gap-2">
@@ -254,6 +277,9 @@ export default function Playground({
             </div>
           )}
         </ConfigurationPanelItem>
+        
+
+        
         <ConfigurationPanelItem title="Status">
           <div className="flex flex-col gap-2">
             <NameValueRow
@@ -290,6 +316,8 @@ export default function Playground({
             />
           </div>
         </ConfigurationPanelItem>
+        
+
         {localVideoTrack && (
           <ConfigurationPanelItem
             title="Camera"
@@ -303,6 +331,8 @@ export default function Playground({
             </div>
           </ConfigurationPanelItem>
         )}
+        
+
         {localMicTrack && (
           <ConfigurationPanelItem
             title="Microphone"
@@ -311,6 +341,8 @@ export default function Playground({
             <AudioInputTile frequencies={localMultibandVolume} />
           </ConfigurationPanelItem>
         )}
+
+        
         <div className="w-full">
           <ConfigurationPanelItem title="Color">
             <ColorPicker
@@ -324,6 +356,8 @@ export default function Playground({
             />
           </ConfigurationPanelItem>
         </div>
+        
+
         {config.show_qr && (
           <div className="w-full">
             <ConfigurationPanelItem title="QR Code">
@@ -331,9 +365,11 @@ export default function Playground({
             </ConfigurationPanelItem>
           </div>
         )}
+
       </div>
     );
   }, [
+
     config.description,
     config.settings,
     config.show_qr,
@@ -346,9 +382,12 @@ export default function Playground({
     localMultibandVolume,
     themeColors,
     setUserSettings,
+
   ]);
 
+
   let mobileTabs: PlaygroundTab[] = [];
+
   if (config.settings.outputs.video) {
     mobileTabs.push({
       title: "Video",
@@ -371,7 +410,9 @@ export default function Playground({
           className="w-full h-full grow"
           childrenClassName="justify-center"
         >
+          
           {audioTileContent}
+
         </PlaygroundTile>
       ),
     });
@@ -384,6 +425,7 @@ export default function Playground({
     });
   }
 
+  /*
   mobileTabs.push({
     title: "Settings",
     content: (
@@ -397,6 +439,7 @@ export default function Playground({
       </PlaygroundTile>
     ),
   });
+  */
 
   return (
     <>
@@ -411,6 +454,7 @@ export default function Playground({
           onConnect(roomState === ConnectionState.Disconnected)
         }
       />
+
       <div
         className={`flex gap-4 py-4 grow w-full selection:bg-${config.settings.theme_color}-900`}
         style={{ height: `calc(100% - ${headerHeight}px)` }}
@@ -422,6 +466,7 @@ export default function Playground({
             initialTab={mobileTabs.length - 1}
           />
         </div>
+
         <div
           className={`flex-col grow basis-1/2 gap-4 h-full hidden lg:${
             !config.settings.outputs.audio && !config.settings.outputs.video
@@ -429,6 +474,7 @@ export default function Playground({
               : "flex"
           }`}
         >
+
           {config.settings.outputs.video && (
             <PlaygroundTile
               title="Video"
@@ -438,6 +484,8 @@ export default function Playground({
               {videoTileContent}
             </PlaygroundTile>
           )}
+
+
           {config.settings.outputs.audio && (
             <PlaygroundTile
               title="Audio"
@@ -447,7 +495,9 @@ export default function Playground({
               {audioTileContent}
             </PlaygroundTile>
           )}
+
         </div>
+
 
         {config.settings.chat && (
           <PlaygroundTile
@@ -457,6 +507,8 @@ export default function Playground({
             {chatTileContent}
           </PlaygroundTile>
         )}
+
+        {/*
         <PlaygroundTile
           padding={false}
           backgroundColor="gray-950"
@@ -465,6 +517,9 @@ export default function Playground({
         >
           {settingsTileContent}
         </PlaygroundTile>
+        */}
+        
+
       </div>
     </>
   );
